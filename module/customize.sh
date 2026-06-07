@@ -9,9 +9,9 @@ if [ -z "$APATCH" ] && [ -z "$KSU" ]; then
   abort "! unsupported root platform"
 fi
 
-if [ -n "$KSU_LATE_LOAD" ] && [ -n "$KSU" ]; then
-  abort "! unsupported late load mode"
-fi
+# if [ -n "$KSU_LATE_LOAD" ] && [ -n "$KSU" ]; then
+  # abort "! unsupported late load mode"
+# fi
 
 case "$ARCH" in
 arm64)

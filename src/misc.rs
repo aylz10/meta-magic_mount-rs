@@ -57,10 +57,10 @@ where
 }
 
 pub fn pre_init() {
-    assert!(
+/*     assert!(
         !(std::env::var("KSU_LATE_LOAD").is_ok() && std::env::var("KSU").is_ok()),
         "! unsupported late load mode"
-    );
+    ); */
 
     init_logger();
     ksucalls::check_ksu();
