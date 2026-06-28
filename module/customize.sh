@@ -53,6 +53,7 @@ extract 'metamount.sh'
 extract 'metauninstall.sh'
 extract 'uninstall.sh'
 extract 'launcher.png'
+extract 'emulated-soft-reboot.sh'
 mkdir -p "$MODPATH/bin/$ARCH_BINARY"
 extract "bin/$ARCH_BINARY/magic_mount_rs" "bin/$ARCH_BINARY" "magic_mount_rs"
 
