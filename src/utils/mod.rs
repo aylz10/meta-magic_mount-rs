@@ -109,9 +109,9 @@ fn legacy_update_desc<S: ToString>(desc: &S) -> Result<()> {
     Ok(())
 }
 
-pub fn update_desc(file: u32, symbol: u32, ignore: u32) -> Result<()> {
+pub fn update_desc(file: u32, symbol: u32, ignore: u32, ignored_file: &str) -> Result<()> {
     let text = format!(
-        "[😋 MF {file},MS {symbol},IG {ignore}] An implementation of a metamodule using Magic Mount."
+        "[😋 MF {file},MS {symbol},IG {ignore} {ignored_file}] An implementation of a metamodule using Magic Mount."
     );
 
     let cmd = if KSU.load(std::sync::atomic::Ordering::Relaxed) {

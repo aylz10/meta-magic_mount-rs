@@ -8,6 +8,7 @@ use std::{
     fs,
     path::{Path, PathBuf},
     sync::atomic::AtomicU32,
+    sync::Mutex,
 };
 
 use anyhow::Context;
@@ -27,6 +28,8 @@ use crate::{
 static MOUNTDED_FILES: AtomicU32 = AtomicU32::new(0);
 static IGNORED_FILES: AtomicU32 = AtomicU32::new(0);
 static MOUNTDED_SYMBOLS_FILES: AtomicU32 = AtomicU32::new(0);
+
+static IGNORED_FILE: Mutex<String> = Mutex::new(String::new());
 
 struct MagicMount {
     node: Node,
@@ -162,6 +165,15 @@ impl MagicMount {
                         let ignored_files =
                             IGNORED_FILES.load(std::sync::atomic::Ordering::Relaxed) + 1;
                         IGNORED_FILES.store(ignored_files, std::sync::atomic::Ordering::Relaxed);
+                        
+                        {
+                            let mut ignored_file = IGNORED_FILE.lock().unwrap();
+                            if !ignored_file.is_empty() {
+                                ignored_file.push(' ');
+                            }
+                            ignored_file.push_str(&name);
+                        }
+                        
                         node.skip = true;
                         continue;
                     }
@@ -325,9 +337,10 @@ where
     let mounted_symbols = MOUNTDED_SYMBOLS_FILES.load(std::sync::atomic::Ordering::Relaxed);
     let mounted_files = MOUNTDED_FILES.load(std::sync::atomic::Ordering::Relaxed);
     let ignored_files = IGNORED_FILES.load(std::sync::atomic::Ordering::Relaxed);
+    let ignored_file = IGNORED_FILE.lock().unwrap();
     log::info!(
         "mounted files: {mounted_files}, mounted symlinks: {mounted_symbols}, ignored files: {ignored_files}"
     );
-    crate::utils::update_desc(mounted_files, mounted_symbols, ignored_files)?;
+    crate::utils::update_desc(mounted_files, mounted_symbols, ignored_files, &ignored_file)?;
     Ok(())
 }
