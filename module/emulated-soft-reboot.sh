@@ -12,7 +12,12 @@ if [ ! -f "$BINARY" ]; then
   exit 1
 fi
 
-$BINARY emulated-soft-reboot
+if [ -f "/data/adb/magic_mount/mm1.log" ]; then
+  mv "/data/adb/magic_mount/mm1.log" "/data/adb/magic_mount/mm1.log.bak"
+fi
+
+echo "emulated-soft-reboot time: $(date '+%Y-%m-%d %H:%M:%S')" >"/data/adb/magic_mount/mm1.log"
+nohup $BINARY emulated-soft-reboot >>"/data/adb/magic_mount/mm1.log" 2>&1
 
 EXIT_CODE=$?
 
